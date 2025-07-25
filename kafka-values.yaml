@@ -15,12 +15,12 @@ auth:
   controllerProtocol: sasl
   saslMechanisms: plain
   clientUsers:
-    - admin
+    - OMITTED
   clientPasswords:
     - "OMITTED"
-  interBrokerUser: admin
+  interBrokerUser: OMITTED
   interBrokerPassword: "OMITTED"
-  controllerUser: admin
+  controllerUser: OMITTED
   controllerPassword: "OMITTED"
 
 service:

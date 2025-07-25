@@ -36,7 +36,7 @@ helm install opensearch opensearch/opensearch \
 # Install OpenSearch Dashboards
 helm install opensearch-dashboards opensearch/opensearch-dashboards \
   -n logging \
-  --set opensearch.username=admin \
+  --set opensearch.username=OMITTED \
   --set opensearch.password='OMITTED' \
   --set opensearchHosts="https://opensearch-cluster-master:9200" \
   --set resources.requests.memory=256Mi \
@@ -57,7 +57,7 @@ kubectl apply -f kafka-consumer.yaml
 helm install grafana grafana/grafana -n logging \
   --set persistence.enabled=true \
   --set persistence.size=1Gi \
-  --set adminUser=admin \
+  --set adminUser=OMITTED \
   --set adminPassword='OMITTED' \
   --set service.type=NodePort \
   --set plugins[0]=grafana-opensearch-datasource \
@@ -92,7 +92,7 @@ data:
       access: proxy
       url: https://opensearch-cluster-master.logging.svc.cluster.local:9200
       basicAuth: true
-      basicAuthUser: admin
+      basicAuthUser: OMITTED
       secureJsonData:
         basicAuthPassword: "OMITTED"
       jsonData:
@@ -122,4 +122,4 @@ kubectl port-forward -n logging svc/grafana 3000:80 &
 echo "Access OpenSearch: https://localhost:9200"
 echo "Access OpenSearch Dashboards: http://localhost:5601"
 echo "Access Grafana: http://localhost:3000"
-echo "Login credentials: admin / OMITTED"
+echo "Login credentials: OMITTED / OMITTED"

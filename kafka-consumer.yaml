@@ -33,13 +33,13 @@ spec:
                   group_id='opensearch-consumers',
                   security_protocol='SASL_PLAINTEXT',
                   sasl_mechanism='PLAIN',
-                  sasl_plain_username='admin',
+                  sasl_plain_username='OMITTED',
                   sasl_plain_password='OMITTED'
               )
 
               opensearch = OpenSearch(
                   hosts=[{'host': 'opensearch-cluster-master', 'port': 9200}],
-                  http_auth=('admin', 'OMITTED'),
+                  http_auth=('OMITTED', 'OMITTED'),
                   use_ssl=True,
                   verify_certs=False,
                   ssl_show_warn=False

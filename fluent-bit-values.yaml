@@ -42,7 +42,7 @@ config:
         Timestamp_Key   @timestamp
         rdkafka.security.protocol             SASL_PLAINTEXT
         rdkafka.sasl.mechanism                PLAIN
-        rdkafka.sasl.username                 admin
+        rdkafka.sasl.username                 OMITTED
         rdkafka.sasl.password                 'OMITTED'
         rdkafka.queue.buffering.max.ms        1000
         rdkafka.message.send.max.retries      3
