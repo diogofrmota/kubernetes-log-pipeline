@@ -1,0 +1,36 @@
+kraft:
+  enabled: true
+
+controller:
+  replicaCount: 1
+
+broker:
+  replicaCount: 0
+
+replicaCount: 1
+
+auth:
+  clientProtocol: sasl
+  interBrokerProtocol: sasl
+  controllerProtocol: sasl
+  saslMechanisms: plain
+  clientUsers:
+    - admin
+  clientPasswords:
+    - "OMITTED"
+  interBrokerUser: admin
+  interBrokerPassword: "OMITTED"
+  controllerUser: admin
+  controllerPassword: "OMITTED"
+
+service:
+  type: ClusterIP
+
+kafka:
+  listeners: "CLIENT://:9092,CONTROLLER://:9093"
+  advertisedListeners: "CLIENT://kafka.logging.svc.cluster.local:9092"
+  listenerSecurityProtocolMap: "CONTROLLER:SASL_PLAINTEXT,CLIENT:SASL_PLAINTEXT"
+  controllerListenerNames: CONTROLLER
+
+persistence:
+  enabled: false

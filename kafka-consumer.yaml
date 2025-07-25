@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-opensearch-consumer
+  namespace: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-opensearch-consumer
+  template:
+    metadata:
+      labels:
+        app: kafka-opensearch-consumer
+    spec:
+      containers:
+        - name: consumer
+          image: bitnami/python:3.9
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              pip install kafka-python opensearch-py &&
+              cat << 'PYEOF' > consumer.py
+              from kafka import KafkaConsumer
+              from opensearchpy import OpenSearch
+              import json
+
+              consumer = KafkaConsumer(
+                  'fluent-bit-logs',
+                  bootstrap_servers='kafka.logging.svc.cluster.local:9092',
+                  auto_offset_reset='earliest',
+                  enable_auto_commit=True,
+                  group_id='opensearch-consumers',
+                  security_protocol='SASL_PLAINTEXT',
+                  sasl_mechanism='PLAIN',
+                  sasl_plain_username='admin',
+                  sasl_plain_password='OMITTED'
+              )
+
+              opensearch = OpenSearch(
+                  hosts=[{'host': 'opensearch-cluster-master', 'port': 9200}],
+                  http_auth=('admin', 'OMITTED'),
+                  use_ssl=True,
+                  verify_certs=False,
+                  ssl_show_warn=False
+              )
+
+              for message in consumer:
+                  log_entry = json.loads(message.value.decode('utf-8'))
+                  try:
+                      response = opensearch.index(
+                          index='fluent-bit-logs',
+                          body=log_entry
+                      )
+                      print(f'Document inserted: {response["_id"]}')
+                  except Exception as e:
+                      print(f'Failed to insert document: {str(e)}')
+              PYEOF
+              python consumer.py
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
